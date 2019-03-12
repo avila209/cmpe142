@@ -37,7 +37,7 @@ main(int argc, char **argv)
         pid = fork();
             wait(1);
             if(pid == 0) {
-                execvp(cmd, line);
+                execvp(sep[0], sep);
                 printf("... yo this shouldnt print man, shit broke \n");
             }
             else{
