@@ -10,10 +10,7 @@
 #include <sys/wait.h>
 #include <string.h>
 
-void parser(char *line, char *cmd, char *argument);
-
-
-
+char **parser(char *line);
 
 int
 main(int argc, char **argv)
@@ -21,6 +18,7 @@ main(int argc, char **argv)
     char *line = NULL;
     char *cmd = NULL;
     char *argument = NULL;
+    char **sep;
     size_t linesize = 0;
     ssize_t linelen;
     pid_t pid;
@@ -32,7 +30,13 @@ main(int argc, char **argv)
             exit(0);
         }
 
-        parser(line, cmd, argument);
+        sep = parser(line);
+
+        cmd = sep[0];
+        argument = sep[1];
+
+        printf("Command line = %s \n", cmd);
+        printf("Argument line = %s \n", argument);
 
         // fork
         if(strncmp("fork", line, 4) == 0) {
@@ -66,21 +70,22 @@ main(int argc, char **argv)
         err(1, "getline");
 }
 
-void parser(char *line, char *cmd, char *argument) {
+
+char **parser(char *line) {
     // Returns first token
     char *parsed;
-    char **tokens = malloc(8*sizeof(char *));
+    char **sep = malloc(8*sizeof(char *));
     int index = 0;
     printf("%s", line); //prints initial input
 
     parsed = strtok(line, " ");
     while(parsed != NULL){
-        tokens[index] = parsed;
+        sep[index] = parsed;
         index++;
 
         parsed = strtok(NULL, " ");
     }
 
-    cmd = tokens[0];
-    argument = tokens[1];
+    sep[index] = NULL;
+    return sep;
 }
