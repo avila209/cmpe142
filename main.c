@@ -57,6 +57,7 @@ main(int argc, char **argv)
 
         // ls
         if(strncmp("ls", line, 2) == 0) {
+            execvp(cmd, argument);
             printf("ok ok we gon do dis");
         }
 
