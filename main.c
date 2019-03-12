@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <dirent.h>
 #include <string.h>
 
 char **parser(char *line);
@@ -23,20 +22,18 @@ int main()
     pid_t pid;
     int stat_loc;
 
-    while ((linelen = getline(&line, &linesize, stdin)) != -1) {
+    while ((linelen = getline(&line, &linesize, stdin) != -1)) {
         printf("yeesh>");
-        if (strncmp("exit", line, 4) == 0) {
-            // user wants to exit
+        if(strncmp("exit", line, 4) == 0){
             exit(0);
         }
 
         sep = parser(line);
-        //while(*sep) printf("%s \n", *sep++);
 
         pid = fork();
             if(pid == 0) {
                 execvp(sep[0], sep);
-                printf("... yo this shouldnt print man, shit broke \n");
+                printf("Execution failed \n");
             }
             else{
                 waitpid(pid, &stat_loc, WUNTRACED);
@@ -53,7 +50,7 @@ char **parser(char *line) {
     char *parsed;
     char **sep = malloc(8*sizeof(char *));
     int index = 0;
-    printf("%s", line); //prints initial input
+    printf("%s \n", line); //prints initial input
 
     parsed = strtok(line, " ");
     while(parsed != NULL){
@@ -61,5 +58,8 @@ char **parser(char *line) {
         index++;
         parsed = strtok(NULL, " ");
     }
+
+    sep[index] = NULL;
+
     return sep;
 }
