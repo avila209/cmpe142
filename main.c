@@ -10,6 +10,7 @@
 #include <string.h>
 
 char **parser(char *line);
+int CD(char *path);
 
 int main()
 {
@@ -20,11 +21,23 @@ int main()
     pid_t pid;
     int stat_loc;
 
+    char home[1000];
+    getcwd(home, 1000);
 
     while ((linelen = getline(&line, &linesize, stdin) != -1)) {
-        //printf("yeesh>");
-        if(strncmp("exit", line, 4) == 0){
+        printf("yeesh>");
+        if(strncmp("exit", line, 4) == 0) {
             exit(0);
+        }
+
+        if(strncmp("cd", line, 2) == 0) {
+            if (CD(sep[1]) < 0) {
+                perror(sep[1]);
+            }
+        }
+
+        if(strncmp("path", line, 4) == 0) {
+            //Do something;
         }
 
         sep = parser(line);
@@ -62,4 +75,9 @@ char **parser(char *line) {
     sep[index] = NULL;
 
     return sep;
+}
+
+
+int CD(char *path){
+    return chdir(path);
 }
