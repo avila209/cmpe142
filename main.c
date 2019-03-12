@@ -31,6 +31,7 @@ int main()
         }
 
         sep = parser(line);
+        //while(*sep) printf("%s \n", *sep++);
 
         pid = fork();
             if(pid == 0) {
@@ -60,7 +61,5 @@ char **parser(char *line) {
         index++;
         parsed = strtok(NULL, " ");
     }
-
-    sep[index] = NULL;
     return sep;
 }
