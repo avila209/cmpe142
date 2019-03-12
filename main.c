@@ -32,18 +32,12 @@ main(int argc, char **argv)
 
         sep = parser(line);
 
-        cmd = sep[0];
-        argument = sep[1];
-
-        printf("Command line = %s \n", cmd);
-        printf("Argument line = %s \n", argument);
-
         // fork
-        if(strncmp("fork", line, 4) == 0) {
-            pid = fork();
+        pid = fork();
             wait(1);
             if(pid == 0) {
-                printf("The DNA says, I am your child");
+                execvp(sep[0], sep);
+                printf("... yo this shouldnt print man");
             }
             else if(pid > 0) {
                 printf("The DNA says, you are the father");
@@ -51,19 +45,9 @@ main(int argc, char **argv)
             else {
                 printf("...somethin aint right bruh");
             }
-        }
+
         // if child, exec
         // if parent, wait
-
-        // ls
-        if(strncmp("ls", line, 2) == 0) {
-            execvp(cmd, argument);
-            printf("ok ok we gon do dis");
-        }
-
-        if(strncmp("./", line, 2) == 0) {
-            printf("put em in the coffin");
-        }
     }
 
     free(line);
