@@ -12,8 +12,7 @@
 
 char **parser(char *line);
 
-int
-main(int argc, char **argv)
+int main()
 {
     char *line = NULL;
     char *cmd = NULL;
@@ -30,8 +29,7 @@ main(int argc, char **argv)
             // user wants to exit
             exit(0);
         }
-        cmd = sep[0];
-        argument = sep[1];
+
         sep = parser(line);
 
         pid = fork();
