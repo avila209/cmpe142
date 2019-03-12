@@ -26,14 +26,17 @@ int main()
 
     while ((linelen = getline(&line, &linesize, stdin) != -1)) {
         printf("yeesh>");
+
         if(strncmp("exit", line, 4) == 0) {
             exit(0);
         }
 
         if(strncmp("cd", line, 2) == 0) {
-            if (CD(sep[1]) < 0) {
+            if(CD(sep[1]) < 0) {
                 perror(sep[1]);
             }
+
+            continue;
         }
 
         if(strncmp("path", line, 4) == 0) {
@@ -45,6 +48,7 @@ int main()
         if (pid == 0) {
             execvp(sep[0], sep);
             printf("Execution failed \n");
+            break;
         }
         else {
             waitpid(pid, &stat_loc, WUNTRACED);
