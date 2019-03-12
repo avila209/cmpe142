@@ -3,11 +3,11 @@
 //
 
 #include <err.h>
+#include <sys/wait.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <sys/wait.h>
 #include <string.h>
 
 char **parser(char *line);
@@ -22,6 +22,7 @@ main(int argc, char **argv)
     size_t linesize = 0;
     ssize_t linelen;
     pid_t pid;
+    int stat_loc;
 
     while ((linelen = getline(&line, &linesize, stdin)) != -1) {
         printf("yeesh>");
@@ -29,25 +30,19 @@ main(int argc, char **argv)
             // user wants to exit
             exit(0);
         }
-
+        cmd = sep[0];
+        argument = sep[1];
         sep = parser(line);
 
-        // fork
         pid = fork();
             wait(1);
             if(pid == 0) {
-                execvp(sep[0], sep);
-                printf("... yo this shouldnt print man");
+                execvp(cmd, line);
+                printf("... yo this shouldnt print man, shit broke \n");
             }
-            else if(pid > 0) {
-                printf("The DNA says, you are the father");
+            else{
+                waitpid(pid, &stat_loc, WUNTRACED);
             }
-            else {
-                printf("...somethin aint right bruh");
-            }
-
-        // if child, exec
-        // if parent, wait
     }
 
     free(line);
@@ -57,7 +52,6 @@ main(int argc, char **argv)
 
 
 char **parser(char *line) {
-    // Returns first token
     char *parsed;
     char **sep = malloc(8*sizeof(char *));
     int index = 0;
@@ -67,7 +61,6 @@ char **parser(char *line) {
     while(parsed != NULL){
         sep[index] = parsed;
         index++;
-
         parsed = strtok(NULL, " ");
     }
 
