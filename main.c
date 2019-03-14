@@ -12,7 +12,6 @@
 char *path = "/bin/";
 
 
-
 char **parser(char *line);
 int executeCD(char *direc);
 
@@ -50,7 +49,7 @@ int main()
         }
 
         if(strncmp("path", line, 4) == 0) {
-            path = sep[1];
+            //path = sep[1]; Need to be able to take multiple arugments and store into char** not char*.
         }
 
         else {
