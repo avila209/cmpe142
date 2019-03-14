@@ -10,7 +10,7 @@
 #include <string.h>
 
 char **parser(char *line);
-int CD(char *path);
+int executeCD(char *path);
 
 int main()
 {
@@ -32,10 +32,9 @@ int main()
         }
 
         if(strncmp("cd", line, 2) == 0) {
-            if(CD(sep[1]) < 0) {
+            if(executeCD(sep[1]) < 0) {
                 perror(sep[1]);
             }
-
             continue;
         }
 
@@ -82,6 +81,11 @@ char **parser(char *line) {
 }
 
 
-int CD(char *path){
-    return chdir(path);
+int executeCD(char *path) {
+    if(path == NULL){
+        printf("Error my dude");
+    }
+    else {
+        return chdir(path);
+    }
 }
