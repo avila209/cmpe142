@@ -23,8 +23,11 @@ int main()
     char *path = NULL;
 
 
-    while ((linelen = getline(&line, &linesize, stdin) != -1)) {
-        printf("yeesh>");
+    while (1) {
+        printf("Thanos>");
+        if((linelen = getline(&line, &linesize, stdin) == -1)){
+            break;
+        }
         sep = parser(line);
 
 
@@ -34,10 +37,10 @@ int main()
 
         if(strncmp("cd", line, 2) == 0) {
             if(sep[2] != NULL){
-                printf("Error: too many directories.");
+                printf("Error: more than one argument passed. \n");
             }
             if(executeCD(sep[1]) < 0) {
-                printf("Error: directory change failed, bad address");
+                printf("Error: directory change failed, bad address. \n");
             }
             continue;
         }
@@ -85,7 +88,7 @@ char **parser(char *line) {
 
 int executeCD(char *path) {
     if(path == NULL){
-        printf("Error: No directory passed");
+        printf("Error: No directory passed. \n");
     }
     else {
         return chdir(path);
