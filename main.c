@@ -97,10 +97,12 @@ char **parser(char *line) {
 
 
 int executeCD(char *direc) {
+    /*
     if(direc == NULL){
         printf("Error: No directory passed. \n");
     }
-    else {
+
+    else { */
         return chdir(direc);
-    }
+    //}
 }
