@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <string.h>
 
-char *path = "/bin/";
+char **path = "/bin/"; //default path
 char *currentDir;
 
 
@@ -27,7 +27,7 @@ int main()
     ssize_t linelen;
     pid_t pid;
     int stat_loc;
-    char *path = NULL;
+    //char *path = NULL;
 
 
     while (1) {
@@ -53,16 +53,24 @@ int main()
         }
 
         if(strncmp("path", line, 4) == 0) {
-            //path = sep[1]; Need to be able to take multiple arugments and store into char** not char*.
+
         }
 
         else {
             pid = fork();
+            int x = 0;
             if (pid == 0) {
-                execv(sep[0], sep);
-                printf("Execution failed \n");
-                break;
-            } else {
+                while(*path){
+                    if((execv(sep[0], path[x]) < 0)){
+                        x++;
+                    }
+                    else{
+                        printf("Execution failed \n");
+                        break;
+                    }
+                }
+            }
+            else {
                 waitpid(pid, &stat_loc, WUNTRACED);
             }
         }
@@ -78,10 +86,12 @@ int main()
 char **parser(char *line) {
     line = strtok(line, "\n");
 
-    char *tmp = malloc(8*sizeof(line));
-    strcat(tmp, path);
-    strcat(tmp, line);
+    char *newpath = path[0];
+    newpath = strtok(path, "\n");
 
+    char *tmp = malloc(8*sizeof(line));
+    strcat(tmp, newpath);
+    strcat(tmp, line);
 
     char *parsed;
     char **sep = malloc(8*sizeof(char *));
@@ -109,3 +119,9 @@ int executeCD(char *direc) {
         return chdir(direc);
     }
 }
+
+/*
+char **parsePATH(char *path){
+
+}
+ */
