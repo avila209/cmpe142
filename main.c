@@ -48,15 +48,15 @@ int main()
         if(strncmp("path", line, 4) == 0) {
             //Do something;
         }
-
-        pid = fork();
-        if (pid == 0) {
-            execvp(sep[0], sep);
-            printf("Execution failed \n");
-            break;
-        }
         else {
-            waitpid(pid, &stat_loc, WUNTRACED);
+            pid = fork();
+            if (pid == 0) {
+                execvp(sep[0], sep);
+                printf("Execution failed \n");
+                break;
+            } else {
+                waitpid(pid, &stat_loc, WUNTRACED);
+            }
         }
 
     }
