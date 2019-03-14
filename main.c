@@ -82,6 +82,7 @@ char **parser(char *line) {
 
 
 int executeCD(char *path) {
+    printf("\n Path entered = %s \n", path);
     if(path == NULL){
         printf("Error my dude");
     }
