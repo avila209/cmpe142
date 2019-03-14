@@ -27,7 +27,6 @@ int main()
     ssize_t linelen;
     pid_t pid;
     int stat_loc;
-    char *path = NULL;
 
 
     while (1) {
@@ -35,6 +34,9 @@ int main()
         if((linelen = getline(&line, &linesize, stdin) == -1)){
             break;
         }
+        char *line2;
+        line2 = strtok(line, "\n");
+
         sep = parser(line);
 
 
@@ -52,12 +54,19 @@ int main()
             continue;
         }
 
-        if(strncmp("path", line, 4) == 0) {
-
+        if(strncmp("path", line, 4) == 0){
+            printf("In path setting mode");
+            int index = 0;
+            while(*sep){
+                path[index] = sep[index];
+                index++;
+                sep++;
+            }
         }
 
         else {
             pid = fork();
+            int i = 0;
             if (pid == 0) {
                 execv(sep[0], sep);
                 printf("Execution failed \n");
@@ -96,10 +105,8 @@ char **parser(char *line) {
     }
 
     sep[index] = NULL;
-
     return sep;
 }
-
 
 int executeCD(char *direc) {
     if(direc == NULL){
