@@ -72,7 +72,6 @@ char **parser(char *line) {
     char *parsed;
     char **sep = malloc(8*sizeof(char *));
     int index = 0;
-    printf("%s \n", line); //prints initial input
 
     parsed = strtok(line, " ");
     while(parsed != NULL){
