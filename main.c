@@ -25,15 +25,16 @@ int main()
 
     while ((linelen = getline(&line, &linesize, stdin) != -1)) {
         printf("yeesh>");
+        sep = parser(line);
+
 
         if(strncmp("exit", line, 4) == 0) {
             exit(0);
         }
 
         if(strncmp("cd", line, 2) == 0) {
-            path = sep[1];
-            if(executeCD(path) < 0) {
-                perror(path);
+            if(executeCD(sep[1]) < 0) {
+                perror(sep[1]);
             }
             continue;
         }
@@ -42,7 +43,6 @@ int main()
             //Do something;
         }
 
-        sep = parser(line);
         pid = fork();
         if (pid == 0) {
             execvp(sep[0], sep);
