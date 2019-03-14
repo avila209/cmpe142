@@ -33,7 +33,7 @@ int main()
         }
 
         if(strncmp("cd", line, 2) == 0) {
-            if(sep[3] != NULL){
+            if(sep[2] != NULL){
                 printf("Error: too many directories.");
             }
             if(executeCD(sep[1]) < 0) {
@@ -85,7 +85,7 @@ char **parser(char *line) {
 
 int executeCD(char *path) {
     if(path == NULL){
-        printf("Error my dude");
+        printf("Error: No directory passed");
     }
     else {
         return chdir(path);
