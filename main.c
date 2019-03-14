@@ -33,8 +33,11 @@ int main()
         }
 
         if(strncmp("cd", line, 2) == 0) {
+            if(sep[3] != NULL){
+                printf("Error: too many directories.");
+            }
             if(executeCD(sep[1]) < 0) {
-                perror(sep[1]);
+                printf("Error: directory change failed, bad address");
             }
             continue;
         }
@@ -76,13 +79,11 @@ char **parser(char *line) {
     }
 
     sep[index] = NULL;
-
     return sep;
 }
 
 
 int executeCD(char *path) {
-    printf("\n Path entered = %s ### \n", path);
     if(path == NULL){
         printf("Error my dude");
     }
