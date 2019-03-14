@@ -74,6 +74,7 @@ int main()
 
 char **parser(char *line) {
     line = strtok(line, "\n");
+
     char *tmp = malloc(8*sizeof(line));
     strcat(tmp, path);
     strcat(tmp, line);
@@ -92,7 +93,6 @@ char **parser(char *line) {
 
     sep[index] = NULL;
 
-    free(tmp);
     return sep;
 }
 
