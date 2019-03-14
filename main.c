@@ -10,6 +10,7 @@
 #include <string.h>
 
 char *path = "/bin/";
+char *currentDir;
 
 
 char **parser(char *line);
@@ -17,6 +18,9 @@ int executeCD(char *direc);
 
 int main()
 {
+    char buff[1000];
+    currentDir =getcwd(buff,sizeof(buff));
+
     char *line = NULL;
     char **sep;
     size_t linesize = 0;
@@ -97,12 +101,11 @@ char **parser(char *line) {
 
 
 int executeCD(char *direc) {
-    /*
     if(direc == NULL){
-        printf("Error: No directory passed. \n");
+        return chdir(currentDir);
     }
 
-    else { */
+    else {
         return chdir(direc);
-    //}
+    }
 }
