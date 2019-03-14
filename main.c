@@ -27,7 +27,7 @@ int main()
     ssize_t linelen;
     pid_t pid;
     int stat_loc;
-    //char *path = NULL;
+    char *path = NULL;
 
 
     while (1) {
@@ -58,19 +58,11 @@ int main()
 
         else {
             pid = fork();
-            int x = 0;
             if (pid == 0) {
-                while(*path){
-                    if((execv(sep[0], path[x]) < 0)){
-                        x++;
-                    }
-                    else{
-                        printf("Execution failed \n");
-                        break;
-                    }
-                }
-            }
-            else {
+                execv(sep[0], sep);
+                printf("Execution failed \n");
+                break;
+            } else {
                 waitpid(pid, &stat_loc, WUNTRACED);
             }
         }
@@ -81,7 +73,6 @@ int main()
     if (ferror(stdin))
         err(1, "getline");
 }
-
 
 char **parser(char *line) {
     line = strtok(line, "\n");
@@ -119,9 +110,3 @@ int executeCD(char *direc) {
         return chdir(direc);
     }
 }
-
-/*
-char **parsePATH(char *path){
-
-}
- */
