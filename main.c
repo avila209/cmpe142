@@ -9,8 +9,12 @@
 #include <unistd.h>
 #include <string.h>
 
+char *path = "/bin/";
+
+
+
 char **parser(char *line);
-int executeCD(char *path);
+int executeCD(char *direc);
 
 int main()
 {
@@ -46,12 +50,13 @@ int main()
         }
 
         if(strncmp("path", line, 4) == 0) {
-            //Do something;
+            path = sep[1];
         }
+
         else {
             pid = fork();
             if (pid == 0) {
-                execvp(sep[0], sep);
+                execv(sep[0], sep);
                 printf("Execution failed \n");
                 break;
             } else {
@@ -69,11 +74,16 @@ int main()
 
 char **parser(char *line) {
     line = strtok(line, "\n");
+    char *tmp = malloc(8*sizeof(line));
+    strcat(tmp, path);
+    strcat(tmp, line);
+
+
     char *parsed;
     char **sep = malloc(8*sizeof(char *));
     int index = 0;
 
-    parsed = strtok(line, " ");
+    parsed = strtok(tmp, " ");
     while(parsed != NULL){
         sep[index] = parsed;
         index++;
@@ -81,15 +91,17 @@ char **parser(char *line) {
     }
 
     sep[index] = NULL;
+
+    free(tmp);
     return sep;
 }
 
 
-int executeCD(char *path) {
-    if(path == NULL){
+int executeCD(char *direc) {
+    if(direc == NULL){
         printf("Error: No directory passed. \n");
     }
     else {
-        return chdir(path);
+        return chdir(direc);
     }
 }
