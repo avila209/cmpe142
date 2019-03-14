@@ -20,9 +20,8 @@ int main()
     ssize_t linelen;
     pid_t pid;
     int stat_loc;
+    char *path = NULL;
 
-    char home[1000];
-    getcwd(home, 1000);
 
     while ((linelen = getline(&line, &linesize, stdin) != -1)) {
         printf("yeesh>");
@@ -32,8 +31,9 @@ int main()
         }
 
         if(strncmp("cd", line, 2) == 0) {
-            if(executeCD(sep[1]) < 0) {
-                perror(sep[1]);
+            path = sep[1];
+            if(executeCD(path) < 0) {
+                perror(path);
             }
             continue;
         }
