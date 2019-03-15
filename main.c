@@ -15,6 +15,7 @@ char *currentDir;
 
 char **parser(char *line);
 int executeCD(char *direc);
+char **setPath(char **sep);
 
 int main()
 {
@@ -55,13 +56,8 @@ int main()
         }
 
         if(strncmp("path", line, 4) == 0){
-            printf("In path setting mode");
-            int index = 0;
-            while(*sep){
-                path[index] = sep[index];
-                index++;
-                sep++;
-            }
+            path = setPath(sep);
+            printf("Path set to %s \n", *path);
         }
 
         else {
@@ -116,4 +112,10 @@ int executeCD(char *direc) {
     else {
         return chdir(direc);
     }
+}
+
+char **setPath(char **sep){
+    char **tmpPATH;
+    tmpPATH = ++sep;
+    return tmpPATH;
 }
