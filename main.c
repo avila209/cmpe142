@@ -15,8 +15,8 @@ char *currentDir;
 
 char **parser(char *line);
 int executeCD(char *direc);
-char **setPath(char **sep);
-void **InitializePath(char **sep);
+char** setPath(char **sep);
+void InitializePath(char **sep);
 
 int main()
 {
@@ -62,7 +62,7 @@ int main()
 
         if(strncmp("path", line, 4) == 0){
             path = setPath(sep);
-            printf("Path set to %s \n", *path);
+            printf("Path[0] = %s \n", path[0]);
         }
 
         else {
@@ -114,15 +114,20 @@ int executeCD(char *direc) {
     }
 }
 
-char **setPath(char **sep){
-    char **tmpPATH;
-    tmpPATH = ++sep;
-    return tmpPATH;
+char **setPath(char **sep) {
+    int index = 0;
+    while(sep[index]){
+        path[index] = sep[index+1];
+        index++;
+    }
+    return path;
 }
 
-void **InitializePath(char **sep){
+void InitializePath(char **sep){
     char *tmp = malloc(8*sizeof(char*));
     strcpy(tmp, path[0]);
     strcat(tmp, sep[0]);
-    sep[0] = tmp; //new function
+    sep[0] = tmp;
+    printf("path = %s \n", path[0]);
+    printf("cmd = %s \n", tmp);
 }
