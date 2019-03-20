@@ -9,18 +9,19 @@
 #include <unistd.h>
 #include <string.h>
 
-char **path = "/bin/"; //default path
+char **path;
 char *currentDir;
 
 
 char **parser(char *line);
 int executeCD(char *direc);
 char **setPath(char **sep);
+void **InitializePath(char **sep);
 
 int main()
 {
     char buff[1000];
-    currentDir =getcwd(buff,sizeof(buff));
+    currentDir = getcwd(buff,sizeof(buff));
 
     char *line = NULL;
     char **sep;
@@ -29,17 +30,21 @@ int main()
     pid_t pid;
     int stat_loc;
 
+    //setting default path
+    path = malloc(8*sizeof(char*));
+    char *defaultPath = malloc(sizeof(5));
+    strcpy(defaultPath, "/bin/");
+    path[0] = defaultPath;
+
+
 
     while (1) {
         printf("Thanos>");
         if((linelen = getline(&line, &linesize, stdin) == -1)){
             break;
         }
-        char *line2;
-        line2 = strtok(line, "\n");
 
         sep = parser(line);
-
 
         if(strncmp("exit", line, 4) == 0) {
             exit(0);
@@ -61,6 +66,8 @@ int main()
         }
 
         else {
+            InitializePath(sep);
+
             pid = fork();
             int i = 0;
             if (pid == 0) {
@@ -82,18 +89,11 @@ int main()
 char **parser(char *line) {
     line = strtok(line, "\n");
 
-    char *newpath = path[0];
-    newpath = strtok(path, "\n");
-
-    char *tmp = malloc(8*sizeof(line));
-    strcat(tmp, newpath);
-    strcat(tmp, line);
-
     char *parsed;
     char **sep = malloc(8*sizeof(char *));
     int index = 0;
 
-    parsed = strtok(tmp, " ");
+    parsed = strtok(line, " ");
     while(parsed != NULL){
         sep[index] = parsed;
         index++;
@@ -118,4 +118,11 @@ char **setPath(char **sep){
     char **tmpPATH;
     tmpPATH = ++sep;
     return tmpPATH;
+}
+
+void **InitializePath(char **sep){
+    char *tmp = malloc(8*sizeof(char*));
+    strcpy(tmp, path[0]);
+    strcat(tmp, sep[0]);
+    sep[0] = tmp;
 }
