@@ -124,5 +124,5 @@ void **InitializePath(char **sep){
     char *tmp = malloc(8*sizeof(char*));
     strcpy(tmp, path[0]);
     strcat(tmp, sep[0]);
-    sep[0] = tmp;
+    sep[0] = tmp; //new function
 }
