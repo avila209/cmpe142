@@ -14,7 +14,7 @@ char *currentDir;
 
 char **parser(char *line);
 int executeCD(char *direc);
-char** setPath(char **sep);
+char** setPath(char *line);
 void InitializePath(char **sep);
 
 int main()
@@ -41,8 +41,6 @@ int main()
             break;
         }
 
-        sep = parser(line);
-
         if(strncmp("exit", line, 4) == 0) {
             exit(0);
         }
@@ -58,15 +56,16 @@ int main()
         }
 
         if(strncmp("path", line, 4) == 0){
-            path = setPath(sep);
-            //strcpy(defaultPath, path[0]);
-            //while(*path != NULL) printf("Path = %s \n", *path++);
+            path = setPath(line);
         }
 
         else {
-            //strcpy(path[0], defaultPath);
-            //while(*path != NULL) printf("Path = %s \n", *path++);
-            InitializePath(sep);
+            sep = parser(line);
+            //InitializePath(sep);
+
+            while(*path != NULL) printf("Path = %s \n", *path++); //still have a mem leak for first token.
+            while(*sep != NULL) printf("Sep = %s \n", *sep++);
+
             pid = fork();
             int i = 0;
             if (pid == 0) {
@@ -113,12 +112,22 @@ int executeCD(char *direc) {
     }
 }
 
-char **setPath(char **sep) {
+char **setPath(char *line) {
+    line = strtok(line, "\n");
+
+    char *parsed;
+    char **path = malloc(8*sizeof(char *));
     int index = 0;
-    while(sep[index]){
-        path[index] = sep[index+1];
+
+    parsed = strtok(line, " ");
+    parsed = strtok(NULL, " ");
+    while(parsed != NULL){
+        path[index] = parsed;
         index++;
+        parsed = strtok(NULL, " ");
     }
+
+    path[index] = NULL;
     return path;
 }
 
