@@ -12,7 +12,6 @@
 char **path;
 char *currentDir;
 
-
 char **parser(char *line);
 int executeCD(char *direc);
 char** setPath(char **sep);
@@ -32,11 +31,9 @@ int main()
 
     //setting default path
     path = malloc(8*sizeof(char*));
-    char *defaultPath = malloc(sizeof(5));
+    char *defaultPath = malloc(sizeof(char*));
     strcpy(defaultPath, "/bin/");
     path[0] = defaultPath;
-
-
 
     while (1) {
         printf("Thanos>");
@@ -62,12 +59,14 @@ int main()
 
         if(strncmp("path", line, 4) == 0){
             path = setPath(sep);
-            printf("Path[0] = %s \n", path[0]);
+            //strcpy(defaultPath, path[0]);
+            //while(*path != NULL) printf("Path = %s \n", *path++);
         }
 
         else {
+            //strcpy(path[0], defaultPath);
+            //while(*path != NULL) printf("Path = %s \n", *path++);
             InitializePath(sep);
-
             pid = fork();
             int i = 0;
             if (pid == 0) {
@@ -125,9 +124,10 @@ char **setPath(char **sep) {
 
 void InitializePath(char **sep){
     char *tmp = malloc(8*sizeof(char*));
+
     strcpy(tmp, path[0]);
     strcat(tmp, sep[0]);
     sep[0] = tmp;
     printf("path = %s \n", path[0]);
-    printf("cmd = %s \n", tmp);
+    printf("sep = %s \n", sep[0]);
 }
