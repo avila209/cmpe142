@@ -81,8 +81,8 @@ int main()
             pid = fork();
             if (pid == 0) {
                 block = (parallel_commands(sep) == 0);
-                printf("block = %d \n", block);
-                while(sep) printf("sep = %s \n", *sep++);
+                //printf("block = %d \n", block);
+                //while(sep) printf("sep = %s \n", *sep++);
 
                 output = redirection(sep, &output_filename);
 
