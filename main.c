@@ -84,10 +84,10 @@ int main()
                 //printf("block = %d \n", block);
                 //while(sep) printf("sep = %s \n", *sep++);
 
-                output = redirection(sep, &output_filename);
+                output = redirection(sep, output_filename);
 
                 if(output){
-                    freopen(output_filename, "w+", stdout);
+                    freopen(*output_filename, "w+", stdout);
                 }
 
                 execvp(sep[0], sep); //needs to be vp
