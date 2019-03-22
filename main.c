@@ -15,6 +15,8 @@ char **parser(char *line);
 int executeCD(char *direc);
 char** setPath(char *line);
 
+int redirection(char **sep, char **output_filename);
+
 int main()
 {
     char buff[1000];
@@ -34,6 +36,10 @@ int main()
     char *defaultPath = malloc(sizeof(char*));
     strcpy(defaultPath, "/bin/");
     path[0] = defaultPath;
+
+    //Redirection vars
+    int output = 0;
+    char **output_filename;
 
     while (1) {
         printf("Thanos>");
@@ -60,19 +66,22 @@ int main()
         }
 
         else {
+            /*
             linenew = malloc(strlen(line)+strlen(path[0])+1);
             strcpy(linenew, path[0]);
             strcat(linenew, line);
-
-            sep = parser(linenew);
-
-            //while(*path != NULL) printf("Path = %s \n", *path++); //still have a mem leak for first token.
-            //while(*sep != NULL) printf("Sep = %s \n", *sep++);
+            */
+            sep = parser(line); //used to be linenew
 
             pid = fork();
             int i = 0;
             if (pid == 0) {
-                execv(sep[0], sep);
+                output = redirection(sep, &output_filename);
+                if(output){
+                    freopen(output_filename, "w+", stdout);
+                }
+
+                execvp(sep[0], sep); //needs to be vp
                 printf("Execution failed \n");
                 break;
             } else {
@@ -132,4 +141,28 @@ char **setPath(char *line) {
 
     path[index] = NULL;
     return path;
+}
+
+
+int redirection(char **sep, char **output_filename){
+    int i, j;
+
+    for(i=0; sep[i] != NULL; i++){
+        if(sep[i][0] == '>') {
+            free(sep[i]);
+
+            if(sep[i+1] != NULL){
+                *output_filename = sep[i+1];
+            }
+            else{
+                return 0;
+            }
+
+            for(j=1; sep[j-1] != NULL; j++){
+                sep[j] = sep[j+2];
+            }
+            return 1;
+        }
+    }
+    return 0;
 }
