@@ -16,6 +16,7 @@ int executeCD(char *direc);
 char** setPath(char *line);
 
 int redirection(char **sep, char **output_filename);
+int parallel_commands(char **sep);
 
 int main()
 {
@@ -40,6 +41,9 @@ int main()
     //Redirection vars
     int output = 0;
     char **output_filename;
+
+    //Parallel command vars
+    int block;
 
     while (1) {
         printf("Thanos>");
@@ -76,7 +80,9 @@ int main()
             pid = fork();
             int i = 0;
             if (pid == 0) {
+                block = (parallel_commands(sep) == 0);
                 output = redirection(sep, &output_filename);
+
                 if(output){
                     freopen(output_filename, "w+", stdout);
                 }
@@ -84,7 +90,8 @@ int main()
                 execvp(sep[0], sep); //needs to be vp
                 printf("Execution failed \n");
                 break;
-            } else {
+            }
+            else {
                 waitpid(pid, &stat_loc, WUNTRACED);
             }
         }
@@ -165,4 +172,19 @@ int redirection(char **sep, char **output_filename){
         }
     }
     return 0;
+}
+
+int parallel_commands(char **sep){
+    int i;
+
+    for(i=1; sep[i] != NULL; i++){
+        if(sep[i-1][0] == '&') {
+            free(sep[i - 1]);
+            sep[i - 1] = NULL;
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
 }
