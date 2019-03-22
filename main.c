@@ -56,6 +56,7 @@ int main()
         }
 
         else if(strncmp("cd", line, 2) == 0) {
+            sep = parser(line);
             if(sep[2] != NULL){
                 printf("Error: more than one argument passed. \n");
             }
@@ -125,7 +126,6 @@ int executeCD(char *direc) {
     if(direc == NULL){
         return chdir(currentDir);
     }
-
     else {
         return chdir(direc);
     }
@@ -174,16 +174,15 @@ int redirection(char **sep, char **output_filename){
     return 0;
 }
 
-int parallel_commands(char **sep){
+int parallel_commands(char **sep) {
     int i;
-
-    for(i=1; sep[i] != NULL; i++){
-        if(sep[i-1][0] == '&') {
+    for (i = 1; sep[i] != NULL; i++) {
+        if (sep[i - 1][0] == '&') {
             free(sep[i - 1]);
             sep[i - 1] = NULL;
             return 1;
         }
-        else{
+        else {
             return 0;
         }
     }
