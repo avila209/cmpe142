@@ -11,7 +11,7 @@
 
 char *currentDir;
 
-char **parser(char *line);
+char** parser(char *line);
 int executeCD(char *direc);
 char** setPath(char *line);
 
@@ -79,9 +79,11 @@ int main()
             sep = parser(line); //used to be linenew
 
             pid = fork();
-            int i = 0;
             if (pid == 0) {
                 block = (parallel_commands(sep) == 0);
+                printf("block = %d \n", block);
+                while(sep) printf("sep = %s \n", *sep++);
+
                 output = redirection(sep, &output_filename);
 
                 if(output){
@@ -92,7 +94,12 @@ int main()
                 printf("Execution failed \n");
                 break;
             }
-            else {
+            else if(block) {
+                printf("waiting for child \n");
+                waitpid(pid, &stat_loc, WUNTRACED);
+            }
+            else{
+                printf("just waiting \n");
                 waitpid(pid, &stat_loc, WUNTRACED);
             }
         }
@@ -177,13 +184,11 @@ int redirection(char **sep, char **output_filename){
 int parallel_commands(char **sep) {
     int i;
     for (i = 1; sep[i] != NULL; i++) {
-        if (sep[i - 1][0] == '&') {
-            free(sep[i - 1]);
-            sep[i - 1] = NULL;
+        if (sep[i-1][0] == '&') {
+            free(sep[i-1]);
+            sep[i-1] = NULL;
+            printf("found an & \n");
             return 1;
-        }
-        else {
-            return 0;
         }
     }
     return 0;
