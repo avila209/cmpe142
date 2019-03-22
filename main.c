@@ -87,7 +87,8 @@ int main()
                 output = redirection(sep, output_filename);
 
                 if(output){
-                    freopen(*output_filename, "w", stdout);
+                    printf("redirecting to %s \n", *output_filename);
+                    freopen(*output_filename, "w+", stdout);
                 }
 
                 execvp(sep[0], sep); //needs to be vp
@@ -99,7 +100,6 @@ int main()
                 waitpid(pid, &stat_loc, WUNTRACED);
             }
             else{
-                printf("just waiting \n");
                 waitpid(pid, &stat_loc, WUNTRACED);
             }
         }
