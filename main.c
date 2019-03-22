@@ -187,4 +187,5 @@ int parallel_commands(char **sep){
             return 0;
         }
     }
+    return 0;
 }
