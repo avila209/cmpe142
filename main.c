@@ -166,7 +166,7 @@ int redirection(char **sep, char **output_filename){
             if(sep[i+1] != NULL && sep[i+2] == NULL){
                 output_filename[0] = sep[i+1];
             }
-            else if(sep[i+1] != NULL && sep[i+2 != NULL]){
+            else if(sep[i+1] != NULL && sep[i+2] != NULL){
                 output_filename[0] = sep[i+1];
                 output_filename[1] = sep[i+2];
             }
