@@ -86,7 +86,10 @@ int main()
 
                 if(output){
                     printf("redirecting to %s \n", *output_filename);
-                    freopen(output_filename[0], "w", stderr);
+                    freopen(output_filename[0], "w", stdout);
+                    if(output_filename[1] != NULL){
+                        freopen(output_filename[1], "w", stdout);
+                    }
                 }
 
                 execvp(sep[0], sep); //needs to be vp
