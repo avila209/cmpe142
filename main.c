@@ -87,7 +87,7 @@ int main()
                 output = redirection(sep, output_filename);
 
                 if(output){
-                    freopen(*output_filename, "w+", stdout);
+                    freopen(*output_filename, "w", stdout);
                 }
 
                 execvp(sep[0], sep); //needs to be vp
@@ -163,7 +163,7 @@ int redirection(char **sep, char **output_filename){
 
     for(i=0; sep[i] != NULL; i++){
         if(sep[i][0] == '>') {
-            //free(sep[i]);
+            sep[i] = NULL;
 
             if(sep[i+1] != NULL){
                 *output_filename = sep[i+1];
