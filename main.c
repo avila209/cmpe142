@@ -175,6 +175,8 @@ int redirection(char **sep, char **output_filename){
             for(j=1; sep[j-1] != NULL; j++){
                 sep[j] = sep[j+2];
             }
+
+            printf("found a > \n");
             return 1;
         }
     }
