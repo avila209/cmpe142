@@ -9,18 +9,18 @@
 #include <unistd.h>
 #include <string.h>
 
-char **path;
 char *currentDir;
 
 char **parser(char *line);
 int executeCD(char *direc);
 char** setPath(char *line);
-void InitializePath(char **sep);
 
 int main()
 {
     char buff[1000];
     currentDir = getcwd(buff,sizeof(buff));
+
+    char *linenew;
 
     char *line = NULL;
     char **sep;
@@ -30,7 +30,7 @@ int main()
     int stat_loc;
 
     //setting default path
-    path = malloc(8*sizeof(char*));
+    char **path = malloc(8*sizeof(char*));
     char *defaultPath = malloc(sizeof(char*));
     strcpy(defaultPath, "/bin/");
     path[0] = defaultPath;
@@ -41,11 +41,11 @@ int main()
             break;
         }
 
-        if(strncmp("exit", line, 4) == 0) {
+        else if(strncmp("exit", line, 4) == 0) {
             exit(0);
         }
 
-        if(strncmp("cd", line, 2) == 0) {
+        else if(strncmp("cd", line, 2) == 0) {
             if(sep[2] != NULL){
                 printf("Error: more than one argument passed. \n");
             }
@@ -55,16 +55,22 @@ int main()
             continue;
         }
 
-        if(strncmp("path", line, 4) == 0){
+        else if(strncmp("path", line, 4) == 0){
             path = setPath(line);
         }
 
         else {
-            sep = parser(line);
+            linenew = malloc(strlen(line)+strlen(path[0])+1);
+            strcpy(linenew, path[0]);
+            strcat(linenew, line);
+
+            printf("linenew = %s \n", linenew);
+
+            sep = parser(linenew);
             //InitializePath(sep);
 
-            while(*path != NULL) printf("Path = %s \n", *path++); //still have a mem leak for first token.
-            while(*sep != NULL) printf("Sep = %s \n", *sep++);
+            //while(*path != NULL) printf("Path = %s \n", *path++); //still have a mem leak for first token.
+            //while(*sep != NULL) printf("Sep = %s \n", *sep++);
 
             pid = fork();
             int i = 0;
@@ -129,14 +135,4 @@ char **setPath(char *line) {
 
     path[index] = NULL;
     return path;
-}
-
-void InitializePath(char **sep){
-    char *tmp = malloc(8*sizeof(char*));
-
-    strcpy(tmp, path[0]);
-    strcat(tmp, sep[0]);
-    sep[0] = tmp;
-    printf("path = %s \n", path[0]);
-    printf("sep = %s \n", sep[0]);
 }
