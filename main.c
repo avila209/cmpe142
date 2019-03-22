@@ -64,10 +64,7 @@ int main()
             strcpy(linenew, path[0]);
             strcat(linenew, line);
 
-            printf("linenew = %s \n", linenew);
-
             sep = parser(linenew);
-            //InitializePath(sep);
 
             //while(*path != NULL) printf("Path = %s \n", *path++); //still have a mem leak for first token.
             //while(*sep != NULL) printf("Sep = %s \n", *sep++);
