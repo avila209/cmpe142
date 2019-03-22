@@ -163,7 +163,7 @@ int redirection(char **sep, char **output_filename){
 
     for(i=0; sep[i] != NULL; i++){
         if(sep[i][0] == '>') {
-            free(sep[i]);
+            //free(sep[i]);
 
             if(sep[i+1] != NULL){
                 *output_filename = sep[i+1];
