@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <fcntl.h>
 
 char *currentDir;
 
@@ -81,14 +82,11 @@ int main()
             pid = fork();
             if (pid == 0) {
                 block = (parallel_commands(sep) == 0);
-                //printf("block = %d \n", block);
-                //while(sep) printf("sep = %s \n", *sep++);
-
                 output = redirection(sep, output_filename);
 
                 if(output){
                     printf("redirecting to %s \n", *output_filename);
-                    freopen(*output_filename, "w+", stdout);
+                    freopen(output_filename[0], "w", stderr);
                 }
 
                 execvp(sep[0], sep); //needs to be vp
@@ -165,18 +163,21 @@ int redirection(char **sep, char **output_filename){
         if(sep[i][0] == '>') {
             sep[i] = NULL;
 
-            if(sep[i+1] != NULL){
-                *output_filename = sep[i+1];
+            if(sep[i+1] != NULL && sep[i+2] == NULL){
+                output_filename[0] = sep[i+1];
+            }
+            else if(sep[i+1] != NULL && sep[i+2 != NULL]){
+                output_filename[0] = sep[i+1];
+                output_filename[1] = sep[i+2];
             }
             else{
+                printf("No output file given \n");
                 return 0;
             }
 
             for(j=1; sep[j-1] != NULL; j++){
                 sep[j] = sep[j+2];
             }
-
-            printf("found a > \n");
             return 1;
         }
     }
