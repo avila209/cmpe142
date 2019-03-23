@@ -81,6 +81,7 @@ int main()
                     printf("redirecting to %s \n", output_filename[0]);
                     freopen(output_filename[0], "w", stdout); // w overrides file, w+ does not override.
                     //dup2(fileno(stdout), fileno(stderr));
+                    fclose(stdout);
                     if(output_filename[1] != NULL){
                         freopen(output_filename[1], "w", stdout);
                     }
