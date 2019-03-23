@@ -75,7 +75,26 @@ int main()
             pid = fork();
             if (pid == 0) {
                 block = (parallel_commands(sep) == 0);
-                output = redirection(sep, output_filename);
+                //output = redirection(sep, &output_filename);
+                int i, j;
+                for(i=0; sep[i] != NULL; i++){
+                    if(sep[i][0] == '>') {
+                        sep[i] = NULL;
+
+                        if(sep[i+1] != NULL){ //&& sep[i+2] == NULL
+                            output_filename[0] = sep[i+1];
+                        }
+                        else{
+                            printf("No output file given \n");
+                            output = 0;
+                        }
+
+                        for(j=1; sep[j-1] != NULL; j++){
+                            sep[j] = sep[j+2];
+                        }
+                        output = 1;
+                    }
+                }
 
                 if(output){
                     //printf("redirecting to %s \n", *output_filename);
