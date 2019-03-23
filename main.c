@@ -44,7 +44,7 @@ int main()
     char **output_filename = malloc(2*sizeof(char*));
 
     //Parallel command vars
-    int block;
+    int parallel;
 
     char **command = malloc(8*sizeof(32));
 
@@ -81,7 +81,7 @@ int main()
         else {
             sep = parser(line);
             output = redirection(sep, output_filename);
-            block = (parallel_commands(sep) == 0);
+            parallel = (parallel_commands(sep) == 0);
 
 
             pid = fork();
@@ -123,12 +123,13 @@ char **parser(char *line) {
     char *parsed;
     char **sep = malloc(8*sizeof(char *));
     int index = 0;
+    char *delim = " \t\r\n\v\f";
 
-    parsed = strtok(line, " ");
+    parsed = strtok(line, delim);
     while(parsed != NULL){
         sep[index] = parsed;
         index++;
-        parsed = strtok(NULL, " ");
+        parsed = strtok(NULL, delim);
     }
 
     sep[index] = NULL;
