@@ -159,7 +159,8 @@ int redirection(char **sep, char **output_filename){
 
             if(sep[i+1] != NULL){ //&& sep[i+2] == NULL
                 printf("filename = %s \n", sep[i+1]);
-                output_filename[0] = sep[i+1];
+                strcpy(output_filename[0], sep[i+1]);
+                //output_filename[0] = sep[i+1];
             }
             /*
             else if(sep[i+1] != NULL && sep[i+2] != NULL){
