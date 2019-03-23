@@ -75,29 +75,10 @@ int main()
             pid = fork();
             if (pid == 0) {
                 block = (parallel_commands(sep) == 0);
-                //output = redirection(sep, &output_filename);
-                int i, j;
-                for(i=0; sep[i] != NULL; i++){
-                    if(sep[i][0] == '>') {
-                        sep[i] = NULL;
-
-                        if(sep[i+1] != NULL){ //&& sep[i+2] == NULL
-                            output_filename[0] = sep[i+1];
-                        }
-                        else{
-                            printf("No output file given \n");
-                            output = 0;
-                        }
-
-                        for(j=1; sep[j-1] != NULL; j++){
-                            sep[j] = sep[j+2];
-                        }
-                        output = 1;
-                    }
-                }
+                output = redirection(sep, output_filename);
 
                 if(output){
-                    //printf("redirecting to %s \n", *output_filename);
+                    printf("redirecting to %s \n", output_filename[0]);
                     freopen(output_filename[0], "w", stdout); // w overrides file, w+ does not override.
                     //dup2(fileno(stdout), fileno(stderr));
                 }
@@ -105,10 +86,6 @@ int main()
                 execvp(sep[0], sep); //needs to be vp
                 printf("Execution failed \n");
                 break;
-            }
-            else if(block) {
-                //printf("waiting for child \n");
-                waitpid(pid, &stat_loc, WUNTRACED);
             }
             else{
                 waitpid(pid, &stat_loc, WUNTRACED);
@@ -156,7 +133,7 @@ char **setPath(char *line) {
     char **path = malloc(8*sizeof(char *));
     int index = 0;
 
-    parsed = strtok(line, " >&\t");
+    parsed = strtok(line, " ");
     parsed = strtok(NULL, " ");
     while(parsed != NULL){
         path[index] = parsed;
