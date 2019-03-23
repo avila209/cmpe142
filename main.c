@@ -39,7 +39,7 @@ int main()
 
     //Redirection vars
     int output = 0;
-    char **output_filename;
+    char **output_filename = malloc(2*sizeof(char*));
 
     //Parallel command vars
     int block;
@@ -155,7 +155,7 @@ int redirection(char **sep, char **output_filename){
 
             if(sep[i+1] != NULL){ //&& sep[i+2] == NULL
                 printf("filename = %s \n", sep[i+1]);
-                output_filename[0] = sep[i+1];
+                *output_filename = sep[i+1];
             }
             /*
             else if(sep[i+1] != NULL && sep[i+2] != NULL){
