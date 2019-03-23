@@ -76,7 +76,6 @@ int main()
             if (pid == 0) {
                 block = (parallel_commands(sep) == 0);
                 output = redirection(sep, output_filename);
-                while(*output_filename != NULL) printf("File = %s \n", *output_filename++);
 
                 if(output){
                     printf("redirecting to %s \n", *output_filename);
@@ -160,6 +159,7 @@ int redirection(char **sep, char **output_filename){
 
     for(i=0; sep[i] != NULL; i++){
         if(sep[i][0] == '>') {
+            printf("found an > \n");
             sep[i] = NULL;
 
             if(sep[i+1] != NULL && sep[i+2] == NULL){
