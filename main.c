@@ -75,7 +75,8 @@ int main()
             pid = fork();
             if (pid == 0) {
                 block = (parallel_commands(sep) == 0);
-                output = redirection(sep, &output_filename);
+                output = redirection(sep, output_filename);
+                while(*output_filename != NULL) printf("File = %s \n", *output_filename++);
 
                 if(output){
                     printf("redirecting to %s \n", *output_filename);
