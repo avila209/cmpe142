@@ -78,13 +78,11 @@ int main()
             if (pid == 0) {
 
                 if(output){
-                    printf("redirecting to %s \n", output_filename[0]);
+                    printf("redirecting to %s and %s \n", output_filename[0], output_filename[1]);
                     freopen(output_filename[0], "w", stdout); // w overrides file, w+ does not override.
                     //dup2(fileno(stdout), fileno(stderr));
-                    fclose(stdout);
-                    if(output_filename[1] != NULL){
-                        freopen(output_filename[1], "w", stdout);
-                    }
+                    //if(output_filename[1] != NULL){
+                        //freopen(output_filename[1], "w", stdout);}
                 }
 
                 execvp(sep[0], sep); //needs to be vp
@@ -157,13 +155,14 @@ int redirection(char **sep, char **output_filename){
         if(sep[i][0] == '>') {
             sep[i] = NULL;
 
-            if(sep[i+1] != NULL && sep[i+2] == NULL){
-                output_filename[0] = sep[i+1];
+            if(sep[i+1] != NULL) { //&& sep[i+2] == NULL
+                output_filename[0] = sep[i + 1];
             }
+            /*
             else if(sep[i+1] != NULL && sep[i+2] != NULL){
                 output_filename[0] = sep[i+1];
                 output_filename[1] = sep[i+2];
-            }
+            }*/
             else{
                 printf("No output file given \n");
                 return 0;
