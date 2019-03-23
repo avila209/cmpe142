@@ -159,16 +159,16 @@ int redirection(char **sep, char **output_filename){
 
     for(i=0; sep[i] != NULL; i++){
         if(sep[i][0] == '>') {
-            printf("found an > \n");
             sep[i] = NULL;
 
             if(sep[i+1] != NULL && sep[i+2] == NULL){
-                output_filename[0] = sep[i+1];
+                *output_filename = sep[i+1];
             }
+            /*
             else if(sep[i+1] != NULL && sep[i+2] != NULL){
                 output_filename[0] = sep[i+1];
                 output_filename[1] = sep[i+2];
-            }
+            }*/
             else{
                 printf("No output file given \n");
                 return 0;
