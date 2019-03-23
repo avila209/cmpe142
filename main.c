@@ -19,6 +19,7 @@ char** setPath(char *line);
 
 int redirection(char **sep, char **output_filename);
 int parallel_commands(char **sep);
+char **initializepath(char **sep, char **path, int i);
 
 int main()
 {
@@ -44,6 +45,8 @@ int main()
 
     //Parallel command vars
     int block;
+
+    char **command = malloc(8*sizeof(32));
 
     while (1) {
         printf("Thanos>");
@@ -75,6 +78,8 @@ int main()
             output = redirection(sep, output_filename);
             block = (parallel_commands(sep) == 0);
 
+            command = initializepath(sep, path, 0);
+
             pid = fork();
             if (pid == 0) {
 
@@ -83,7 +88,7 @@ int main()
                         freopen(output_filename[0], "w", stderr);
                 }
 
-                execvp(sep[0], sep); //needs to be vp
+                execv(command[0], command);
                 printf("%s \n", error_message);
                 break;
             }
@@ -186,3 +191,15 @@ int parallel_commands(char **sep) {
     return 0;
 }
 
+char **initializepath(char **sep, char **path, int i){
+    int j = 1;
+    char **command = malloc(8*sizeof(32));
+    command[0] = path[0];
+    strcat(command[0], sep[0]);
+    while(sep[j] != NULL){
+        command[j] = sep[j];
+        j++;
+    }
+    command[j] = NULL;
+    return command;
+}
