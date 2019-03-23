@@ -24,8 +24,6 @@ int main()
     char buff[1000];
     currentDir = getcwd(buff,sizeof(buff));
 
-    char *linenew;
-
     char *line = NULL;
     char **sep;
     size_t linesize = 0;
@@ -72,12 +70,7 @@ int main()
         }
 
         else {
-            /*
-            linenew = malloc(strlen(line)+strlen(path[0])+1);
-            strcpy(linenew, path[0]);
-            strcat(linenew, line);
-            */
-            sep = parser(line); //used to be linenew
+            sep = parser(line);
 
             pid = fork();
             if (pid == 0) {
@@ -86,9 +79,11 @@ int main()
 
                 if(output){
                     printf("redirecting to %s \n", *output_filename);
-                    freopen(output_filename[0], "w", stdout);
+                    freopen(output_filename[0], "w", stdout); // w overrides file, w+ does not override.
+                    //dup2(fileno(stdout), fileno(stderr));
                     if(output_filename[1] != NULL){
                         freopen(output_filename[1], "w", stdout);
+                        //dup2(fileno(stdout), fileno(stderr));
                     }
                 }
 
@@ -97,7 +92,7 @@ int main()
                 break;
             }
             else if(block) {
-                printf("waiting for child \n");
+                //printf("waiting for child \n");
                 waitpid(pid, &stat_loc, WUNTRACED);
             }
             else{
@@ -146,7 +141,7 @@ char **setPath(char *line) {
     char **path = malloc(8*sizeof(char *));
     int index = 0;
 
-    parsed = strtok(line, " ");
+    parsed = strtok(line, " >&\t");
     parsed = strtok(NULL, " ");
     while(parsed != NULL){
         path[index] = parsed;
@@ -199,3 +194,4 @@ int parallel_commands(char **sep) {
     }
     return 0;
 }
+
