@@ -1,4 +1,10 @@
 # CMPE 142 Assignment 1
+Group Members:
+	
+	Luis Avila
+	Alex Gomez
+	Shaneil Maharaj
+
 Instructions:
 
 	Step 1: Open terminal in linux
@@ -6,3 +12,8 @@ Instructions:
 	Step 3: Enter “gcc main.c - o main” into terminal
 	Step 4: Enter “./main” in terminal to run our shell
 	Step 5: Shell is invoked, begin testing.
+
+Notes:
+
+	Could not implement parallel commands.
+	Could not implement & and > without whitespace.
