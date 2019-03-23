@@ -78,7 +78,8 @@ int main()
             if (pid == 0) {
 
                 if(output){
-                    freopen(output_filename[0], "w", stdout);
+                        freopen(output_filename[0], "w", stdout);
+                        freopen(output_filename[0], "w", stderr);
                 }
 
                 execvp(sep[0], sep); //needs to be vp
@@ -151,12 +152,11 @@ int redirection(char **sep, char **output_filename){
         if(sep[i][0] == '>') {
             sep[i] = NULL;
 
-            if(sep[i+1] != NULL && sep[i+2] == NULL) {
+            if(sep[i+1] != NULL) {
                 output_filename[0] = sep[i + 1];
             }
-            else if(sep[i+1] != NULL && sep[i+2] != NULL){
-                output_filename[0] = sep[i+1];
-                output_filename[1] = sep[i+2];
+            else if(sep[i+2] != NULL){
+                printf("Error: trying to write to multiple outputs");
             }
             else{
                 printf("No output file given \n");
