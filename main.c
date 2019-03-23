@@ -91,8 +91,16 @@ int main()
                         freopen(output_filename[0], "w", stdout);
                         freopen(output_filename[0], "w", stderr);
                 }
-                
-                command = initializepath(sep, path, 0);
+                int i = 0;
+                while(path[i]){
+                    command = initializepath(sep, path, i);
+                    if(access(command[0], X_OK) == 0){
+                        break;
+                    }
+                    else{
+                        i++;
+                    }
+                }
                 execv(command[0], command);
                 printf("%s \n", error_message);
                 break;
@@ -201,7 +209,7 @@ char **initializepath(char **sep, char **path, int i){
     char **command = malloc(8*sizeof(32));
     char *slash = malloc(sizeof(1));
     strcpy(slash, "/");
-    command[0] = strdup(path[0]);
+    command[0] = strdup(path[i]);
     strcat(command[0], slash);
     strcat(command[0], sep[0]);
     while(sep[j] != NULL){
