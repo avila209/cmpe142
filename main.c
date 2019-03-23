@@ -11,6 +11,7 @@
 #include <fcntl.h>
 
 char *currentDir;
+char error_message[30] = "An error has occurred\n";
 
 char** parser(char *line);
 int executeCD(char *direc);
@@ -57,10 +58,10 @@ int main()
         else if(strncmp("cd", line, 2) == 0) {
             sep = parser(line);
             if(sep[2] != NULL){
-                printf("Error: more than one argument passed. \n");
+                printf("%s \n", error_message);
             }
             if(executeCD(sep[1]) < 0) {
-                printf("Error: directory change failed, bad address. \n");
+                printf("%s \n", error_message);
             }
             continue;
         }
@@ -83,7 +84,7 @@ int main()
                 }
 
                 execvp(sep[0], sep); //needs to be vp
-                printf("Execution failed \n");
+                printf("%s \n", error_message);
                 break;
             }
             else{
@@ -156,10 +157,10 @@ int redirection(char **sep, char **output_filename){
                 output_filename[0] = sep[i + 1];
             }
             else if(sep[i+2] != NULL){
-                printf("Error: trying to write to multiple outputs");
+                printf("%s \n", error_message);
             }
             else{
-                printf("No output file given \n");
+                printf("%s \n", error_message);
                 return 0;
             }
 
