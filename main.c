@@ -78,7 +78,7 @@ int main()
                 output = redirection(sep, output_filename);
 
                 if(output){
-                    printf("redirecting to %s \n", output_filename);
+                    //printf("redirecting to %s \n", *output_filename);
                     freopen(output_filename[0], "w", stdout); // w overrides file, w+ does not override.
                     //dup2(fileno(stdout), fileno(stderr));
                 }
