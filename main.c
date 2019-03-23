@@ -78,8 +78,8 @@ int main()
                 output = redirection(sep, output_filename);
 
                 if(output){
-                    printf("redirecting to %s \n", *output_filename);
-                    freopen(*output_filename, "w", stdout); // w overrides file, w+ does not override.
+                    printf("redirecting to %s \n", output_filename);
+                    freopen(output_filename[0], "w", stdout); // w overrides file, w+ does not override.
                     //dup2(fileno(stdout), fileno(stderr));
                 }
 
@@ -157,8 +157,8 @@ int redirection(char **sep, char **output_filename){
         if(sep[i][0] == '>') {
             sep[i] = NULL;
 
-            if(sep[i+1] != NULL && sep[i+2] == NULL){
-                *output_filename = sep[i+1];
+            if(sep[i+1] != NULL){
+                output_filename[0] = sep[i+1];
             }
             /*
             else if(sep[i+1] != NULL && sep[i+2] != NULL){
